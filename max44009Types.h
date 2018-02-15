@@ -25,6 +25,16 @@ typedef enum {
     LIGHT_TIMER         = 0x07
 } LIGHT_REG_t;
 
+typedef enum {
+    LIGHT_ISR_OFF       = 0x00,
+    LIGHT_ISR_ON        = 0x01
+} LIGHT_ISR_ENABLED_t;
+
+typedef enum {
+    LIGHT_ISR_INACTIVE  = 0x00,
+    LIGHT_ISR_ACTIVE    = 0x01
+} LIGHT_ISR_TRIGGERED_t;
+
 /********* CONFIGURATION REGISTER MASKS *********/
 
 typedef enum {
