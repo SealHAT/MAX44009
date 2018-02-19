@@ -7,37 +7,53 @@
 static struct {
     //SERCOM I2C;       /* The I2C hardware - unkown type for now */
     uint8_t address;    /* The I2C address of the sensor */
-
+	struct io_descriptor *wire_io;
 } max44009_data;
 
 /* read a single register */
 static uint8_t readReg(const uint8_t REG) {
-
+	uint8_t retval;
+	io_write(max44009_data.wire_io, &REG, 1);
+	io_read(max44009_data.wire_io, &retval, 1);
+	return retval;
 } 
 
 /* Function to read two registers back to back without a stop condition (for temperature) */
 static void readReg2(const uint8_t REG, uint8_t* const first, uint8_t* const second) {
-    
+    uint8_t retvals[2];	
+	io_write(max44009_data.wire_io, &REG, 1);
+    io_read(max44009_data.wire_io, retvals, 2);
+	*first  = retvals[0];
+	*second = retvals[1];
 }
 
 /* write a single register */
 static void writeReg(const uint8_t REG, const uint8_t VAL) {
-
+	uint8_t sendvals[2];
+	sendvals[0] = REG;
+	sendvals[1] = VAL;
+	io_write(max44009_data.wire_io, sendvals, 2);
 }
 
-bool max44009_init(const uint8_t ADDR)
+bool max44009_init(struct i2c_m_sync_desc *const WIRE_I2C, const uint8_t ADDR)
 {
-    max44009_data.address = ADDR;
+	max44009_data.address = ADDR;
+	i2c_m_sync_get_io_descriptor(WIRE_I2C, &max44009_data.wire_io);
+    i2c_m_sync_enable(WIRE_I2C);
+    i2c_m_sync_set_slaveaddr(WIRE_I2C, max44009_data.address, I2C_M_SEVEN);
+	return true;
 }
 
 bool max44009_configure(const uint8_t configuration)
 {
     writeReg(LIGHT_ISR_CONFIG, configuration);
+	return true;
 }
 
 bool max44009_isr(const uint8_t enable)
 {
     writeReg(LIGHT_ISR_ENABLE, enable);
+	return true;
 }
 
 float max44009_read_float()
@@ -72,4 +88,5 @@ bool max44009_set_window(const uint8_t upper, const uint8_t lower, const uint8_t
     writeReg(LIGHT_UPPER_LIMIT, upper);
     writeReg(LIGHT_LOWER_LIMIT, lower);
     writeReg(LIGHT_TIMER, timer);
+	return true;
 }

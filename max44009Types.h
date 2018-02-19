@@ -7,8 +7,8 @@
  * R/W bit is the LSB of the address, with these addresses shifted left one bit.
  */
 typedef enum {
-    MAX44009_ADD_GND    = 0x4A,
-    MAX44009_ADD_VCC    = 0x4B,
+    LIGHT_ADD_GND    = 0x4A,
+    LIGHT_ADD_VCC    = 0x4B,
 } MAX44009_ADDR_t;
 
 /**

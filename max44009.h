@@ -1,6 +1,9 @@
 #ifndef __MAX44009_H__
 #define __MAX44009_H__
 
+#include <atmel_start.h>	/* where the IO functions live */
+#include <stdint.h>
+#include <stdbool.h>
 #include "max44009Types.h"
 
 /** @breif Sets up the interrupt detection window
@@ -9,10 +12,11 @@
  * to use and the address of the sensor. The address has only two valid inputs
  * based on MAX44009_ADDR_t enum but this is not checked in this function.
  *
+ * @param i2c
  * @param ADDR Address of the sensor (see MAX44009_ADDR_t enum)
  * @return True if successful, false if not. Any error is likely due to I2C
  */
-bool max44009_init(const uint8_t ADDR);
+bool max44009_init(struct i2c_m_sync_desc *const WIRE_I2C, const uint8_t ADDR);
 
 /** @breif Configures the max44009 light sensor
  *
