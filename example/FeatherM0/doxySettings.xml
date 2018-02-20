@@ -4,7 +4,7 @@
   <ProjectName>FeatherM0</ProjectName>
   <DoxyExePath>C:\Program Files\doxygen\bin\doxygen.exe</DoxyExePath>
   <UseDefaultSettings>true</UseDefaultSettings>
-  <GenerateAsPartOfBuild>true</GenerateAsPartOfBuild>
+  <GenerateAsPartOfBuild>false</GenerateAsPartOfBuild>
   <ConfigFilePath>C:\Users\eslatter\Desktop\working\MAX44009\example\FeatherM0\doxyfile</ConfigFilePath>
   <OutputDirPath>C:\Users\eslatter\Desktop\working\MAX44009\example\FeatherM0\doxygen</OutputDirPath>
   <ShowErrorsAndWarnings>false</ShowErrorsAndWarnings>

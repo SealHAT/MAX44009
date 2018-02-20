@@ -1,7 +1,7 @@
 #ifndef __MAX44009_H__
 #define __MAX44009_H__
 
-#include <atmel_start.h>	/* where the IO functions live */
+#include <atmel_start.h>    /* where the IO functions live */
 #include <stdint.h>
 #include <stdbool.h>
 #include "max44009Types.h"
@@ -16,7 +16,7 @@
  * @param ADDR Address of the sensor (see MAX44009_ADDR_t enum)
  * @return True if successful, false if not. Any error is likely due to I2C
  */
-bool max44009_init(struct i2c_m_sync_desc *const WIRE_I2C, const uint8_t ADDR);
+bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR);
 
 /** @brief Configures the max44009 light sensor
  *
@@ -57,12 +57,21 @@ uint16_t max44009_read_uint16();
  * The sensor works by continuously sampling and storing the latest sample
  * into a register that can be read at any time. This function retrieves the
  * latest sample from that register. This function returns the lux value as an
- * unsigned intiger, discarding the decimal portion of the value. Lux can range
+ * unsigned integer, discarding the decimal portion of the value. Lux can range
  * from 0 to 188,006.
  *
  * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
  */
 uint32_t max44009_read_integer_lux();
+
+/** @brief Gets the most recent reading from the sensor without decoding
+ *
+ * This function returns the lux value as an unsigned integer, discarding
+ * the decimal portion of the value. Lux can range from 0 to 188,006.
+ *
+ * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
+ */
+uint32_t max44009_integer_lux(const uint16_t reading);
 
 /** @brief Gets the most recent reading from the sensor
  *
