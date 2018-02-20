@@ -1,4 +1,7 @@
-## C git ignore template
+############
+## C Language
+############
+
 # Prerequisites
 *.d
 
@@ -7,8 +10,6 @@
 *.ko
 *.obj
 *.elf
-*.slo
-*.lo
 
 # Linker output
 *.ilk
@@ -24,7 +25,6 @@
 *.a
 *.la
 *.lo
-*.lai
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -45,18 +45,3 @@
 *.su
 *.idb
 *.pdb
-
-# Fortran module files
-*.mod
-*.smod
-
-## CMAKE ignores
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake

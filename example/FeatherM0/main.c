@@ -3,13 +3,13 @@
 #include "usb_start.h"
 #include "max44009.h"
 
-#define STRING_SIZE		(30)
+#define STRING_SIZE		(64)
 
 int main(void)
 {
 	char  output[STRING_SIZE];
-	float lightLevel = 9.0;
-//	uint16_t lux;
+	uint16_t reading;
+	uint32_t lux;
 	
 	/* Initializes MCU, drivers and middleware */
 	atmel_start_init();
@@ -19,11 +19,12 @@ int main(void)
 		/* Turn on LED if the DTR signal is set (serial terminal open on host) */
 		gpio_set_pin_level(LED_BUILTIN, usb_dtr());
 		
-		/* Read the light sensor and output it to the serial USB */
-		lightLevel = max44009_read_float();
-//		lux = max44009_read_uint16();
-		sprintf(output, "Light Level: %0lX lux\n", (uint32_t)lightLevel);
-		
+		/* Read the light sensor as both a exponent/mantissa and as an integer LUX value */
+		reading = max44009_read_uint16();
+		lux     = max44009_read_integer_lux();
+				
+		/* Format as a string and output to USB Serial */
+		sprintf(output, "%04X (exp=%2d  mant=%3d) -> %ld lux\n", reading, (reading>>8), reading&0xFF, lux);
 		if(usb_dtr()) {
 			char* c = output;
 			while(*c != '\0') {
@@ -32,6 +33,6 @@ int main(void)
 			}
 			usb_flush();
 		}
-		delay_ms(100);
+		delay_ms(1000);
 	}
 }

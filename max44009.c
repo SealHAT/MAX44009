@@ -56,29 +56,38 @@ bool max44009_isr(const uint8_t enable)
 	return true;
 }
 
+uint16_t max44009_read_uint16()
+{
+	uint16_t luxVal = 0x0000;
+
+	luxVal |= readReg(LIGHT_LUX_MSB) << 4;
+	luxVal |= (readReg(LIGHT_LUX_LSB) & 0x0F);
+
+	return luxVal;
+}
+
+uint32_t max44009_read_integer_lux()
+{
+	uint16_t value = max44009_read_uint16();
+	uint8_t exponent;
+	uint8_t mantissa;
+
+	exponent = value >> 8;
+	mantissa = value & 0xFF;
+
+	return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
+}
+
 float max44009_read_float()
 {
-    uint8_t luxHigh;
-    uint8_t luxLow;
+    uint16_t value = max44009_read_uint16();
     uint8_t exponent;
     uint8_t mantissa;
 
-    luxHigh = readReg(LIGHT_LUX_MSB);
-    luxLow = readReg(LIGHT_LUX_LSB);
-    exponent = (luxHigh & 0xF0) >> 4;
-    mantissa = ((luxHigh & 0x0F) << 4) | (luxLow & 0x0F);
+    exponent = value >> 8;
+    mantissa = value & 0xFF;
 
-    return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
-}
-
-uint16_t max44009_read_uint16()
-{
-    uint16_t luxVal = 0x0000;
-
-    luxVal |= readReg(LIGHT_LUX_MSB) << 4;
-    luxVal |= (readReg(LIGHT_LUX_LSB) & 0x0F);
-
-    return luxVal;
+    return pow(2, exponent) * (float)mantissa * FULL_ACCURACY_CONSTANT;
 }
 
 bool max44009_set_window(const uint8_t upper, const uint8_t lower, const uint8_t timer)
