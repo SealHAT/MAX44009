@@ -51,27 +51,15 @@ uint16_t max44009_read_uint16()
     return luxVal;
 }
 
-uint32_t max44009_read_integer_lux()
-{
-    uint16_t value = max44009_read_uint16();
-    uint8_t exponent;
-    uint8_t mantissa;
-
-    exponent = value >> 8;
-    mantissa = value & 0xFF;
-
-    return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
-}
-
 uint32_t max44009_integer_lux(const uint16_t reading)
 {
-    uint8_t exponent;
-    uint8_t mantissa;
+	uint8_t exponent;
+	uint8_t mantissa;
 
-    exponent = reading >> 8;
-    mantissa = reading & 0xFF;
+	exponent = reading >> 8;
+	mantissa = reading & 0xFF;
 
-    return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
+	return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
 }
 
 float max44009_read_float()

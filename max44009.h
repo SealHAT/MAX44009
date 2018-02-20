@@ -62,7 +62,7 @@ uint16_t max44009_read_uint16();
  *
  * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
  */
-uint32_t max44009_read_integer_lux();
+inline uint32_t max44009_read_integer_lux() { return max44009_integer_lux(max44009_read_uint16()); }
 
 /** @brief Gets the most recent reading from the sensor without decoding
  *
