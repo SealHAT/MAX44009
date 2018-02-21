@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include "max44009Types.h"
 
-/** @brief Sets up the interrupt detection window
+/** @brief initializes the data structures and hardware interfaces
  *
  * This function initializes the sensor interface with the I2C interface
  * to use and the address of the sensor. The address has only two valid inputs
