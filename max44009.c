@@ -4,28 +4,48 @@
 #define FULL_ACCURACY_CONSTANT      (0.045)
 #define LOW_ACCURACY_CONSTANT       (0.720)
 
-static struct i2c_m_sync_desc max44009_sync;
+static struct i2c_m_async_desc max44009_async;
+static volatile bool tx_done = false;
+static volatile bool rx_done = false;
+
+static void tx_cb(struct i2c_m_async_desc *const i2c)
+{
+	tx_done = true;
+}
+
+static void rx_cb(struct i2c_m_async_desc *const i2c)
+{
+	rx_done = true;
+}
 
 /* read a single register */
 static uint8_t readReg(const uint8_t REG)
 {
     uint8_t retval;
-    i2c_m_sync_cmd_read(&max44009_sync, REG, &retval, 1);
+    i2c_m_async_cmd_read(&max44009_async, REG, &retval);
+	
+	while(!rx_done) {}
+	rx_done = false;
+	
     return retval;
 }
 
 /* write a single register */
 static void writeReg(const uint8_t REG, const uint8_t VAL)
 {
-    uint8_t sendval;
-    i2c_m_sync_cmd_write(&max44009_sync, REG, &sendval, 1);
+    i2c_m_async_cmd_write(&max44009_async, REG, VAL);
+	
+	while(!tx_done) {}
+	tx_done = false;
 }
 
-bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR)
+bool max44009_init(struct i2c_m_async_desc* const WIRE_I2C, const uint8_t ADDR)
 {
-    max44009_sync =  *WIRE_I2C;
-    i2c_m_sync_enable(&max44009_sync);
-    i2c_m_sync_set_slaveaddr(&max44009_sync, ADDR, I2C_M_SEVEN);
+    max44009_async =  *WIRE_I2C;
+    i2c_m_async_enable(&max44009_async);
+	i2c_m_async_register_callback(&max44009_async, I2C_M_ASYNC_TX_COMPLETE, (FUNC_PTR)tx_cb);
+	i2c_m_async_register_callback(&max44009_async, I2C_M_ASYNC_RX_COMPLETE, (FUNC_PTR)rx_cb);
+    i2c_m_async_set_slaveaddr(&max44009_async, ADDR, I2C_M_SEVEN);
     return true;
 }
 
