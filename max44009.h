@@ -54,6 +54,15 @@ uint16_t max44009_read_uint16();
 
 /** @brief Gets the most recent reading from the sensor without decoding
  *
+ * This function returns the lux value as an unsigned integer, discarding
+ * the decimal portion of the value. Lux can range from 0 to 188,006.
+ *
+ * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
+ */
+uint32_t max44009_integer_lux(const uint16_t reading);
+
+/** @brief Gets the most recent reading from the sensor without decoding
+ *
  * The sensor works by continuously sampling and storing the latest sample
  * into a register that can be read at any time. This function retrieves the
  * latest sample from that register. This function returns the lux value as an
@@ -63,15 +72,6 @@ uint16_t max44009_read_uint16();
  * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
  */
 inline uint32_t max44009_read_integer_lux() { return max44009_integer_lux(max44009_read_uint16()); }
-
-/** @brief Gets the most recent reading from the sensor without decoding
- *
- * This function returns the lux value as an unsigned integer, discarding
- * the decimal portion of the value. Lux can range from 0 to 188,006.
- *
- * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
- */
-uint32_t max44009_integer_lux(const uint16_t reading);
 
 /** @brief Gets the most recent reading from the sensor
  *
