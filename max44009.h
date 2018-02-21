@@ -12,7 +12,7 @@
  * to use and the address of the sensor. The address has only two valid inputs
  * based on MAX44009_ADDR_t enum but this is not checked in this function.
  *
- * @param i2c
+ * @param WIRE_I2C device data structure to use for talking to the sensor
  * @param ADDR Address of the sensor (see MAX44009_ADDR_t enum)
  * @return True if successful, false if not. Any error is likely due to I2C
  */
