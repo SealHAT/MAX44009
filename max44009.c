@@ -15,10 +15,9 @@ static uint8_t readReg(const uint8_t REG)
 }
 
 /* write a single register */
-static void writeReg(const uint8_t REG, const uint8_t VAL)
+static void writeReg(const uint8_t REG, uint8_t val)
 {
-    uint8_t sendval;
-    i2c_m_sync_cmd_write(&max44009_sync, REG, &sendval, 1);
+    i2c_m_sync_cmd_write(&max44009_sync, REG, &val, 1);
 }
 
 bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR)
