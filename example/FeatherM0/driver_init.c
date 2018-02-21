@@ -19,7 +19,7 @@ struct spi_m_sync_descriptor spi_dev;
 
 struct adc_sync_descriptor analog_in;
 
-struct i2c_m_sync_desc wire;
+struct i2c_m_async_desc wire;
 
 void analog_in_PORT_init(void)
 {
@@ -94,7 +94,7 @@ void wire_CLOCK_init(void)
 void wire_init(void)
 {
 	wire_CLOCK_init();
-	i2c_m_sync_init(&wire, SERCOM3);
+	i2c_m_async_init(&wire, SERCOM3);
 	wire_PORT_init();
 }
 

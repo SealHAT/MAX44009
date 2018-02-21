@@ -73,14 +73,22 @@ void hash_chk_example(void)
 		;
 }
 
+static uint8_t wire_example_str[12] = "Hello World!";
+
+void wire_tx_complete(struct i2c_m_async_desc *const i2c)
+{
+}
+
 void wire_example(void)
 {
 	struct io_descriptor *wire_io;
 
-	i2c_m_sync_get_io_descriptor(&wire, &wire_io);
-	i2c_m_sync_enable(&wire);
-	i2c_m_sync_set_slaveaddr(&wire, 0x12, I2C_M_SEVEN);
-	io_write(wire_io, (uint8_t *)"Hello World!", 12);
+	i2c_m_async_get_io_descriptor(&wire, &wire_io);
+	i2c_m_async_enable(&wire);
+	i2c_m_async_register_callback(&wire, I2C_M_ASYNC_TX_COMPLETE, (FUNC_PTR)wire_tx_complete);
+	i2c_m_async_set_slaveaddr(&wire, 0x12, I2C_M_SEVEN);
+
+	io_write(wire_io, wire_example_str, 12);
 }
 
 /**

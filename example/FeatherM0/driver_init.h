@@ -24,7 +24,7 @@ extern "C" {
 #include <hal_adc_sync.h>
 #include <hal_crc_sync.h>
 
-#include <hal_i2c_m_sync.h>
+#include <hal_i2c_m_async.h>
 #include <hal_spi_m_sync.h>
 
 #include <hal_delay.h>
@@ -35,16 +35,16 @@ extern "C" {
 extern struct adc_sync_descriptor analog_in;
 extern struct crc_sync_descriptor hash_chk;
 
-extern struct i2c_m_sync_desc       wire;
+extern struct i2c_m_async_desc      wire;
 extern struct spi_m_sync_descriptor spi_dev;
 
 void analog_in_PORT_init(void);
 void analog_in_CLOCK_init(void);
 void analog_in_init(void);
 
+void wire_PORT_init(void);
 void wire_CLOCK_init(void);
 void wire_init(void);
-void wire_PORT_init(void);
 
 void spi_dev_PORT_init(void);
 void spi_dev_CLOCK_init(void);

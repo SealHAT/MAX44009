@@ -351,6 +351,7 @@
     <ListValues>
       <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
       <Value>%24(PackRepoDir)\atmel\SAMD21_DFP\1.2.280\samd21a\include</Value>
+      <Value>../../..</Value>
       <Value>../Config</Value>
       <Value>../</Value>
       <Value>../examples</Value>
@@ -374,7 +375,6 @@
       <Value>../usb/class/cdc</Value>
       <Value>../usb/class/cdc/device</Value>
       <Value>../usb/device</Value>
-      <Value>../../..</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
@@ -546,7 +546,7 @@
     <Compile Include="hal\include\hal_gpio.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\include\hal_i2c_m_sync.h">
+    <Compile Include="hal\include\hal_i2c_m_async.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\include\hal_init.h">
@@ -681,7 +681,7 @@
     <Compile Include="hal\src\hal_gpio.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\src\hal_i2c_m_sync.c">
+    <Compile Include="hal\src\hal_i2c_m_async.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\src\hal_init.c">
