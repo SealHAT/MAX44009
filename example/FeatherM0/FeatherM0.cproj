@@ -444,6 +444,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\max44009.c">
+      <SubType>compile</SubType>
+      <Link>max44009.c</Link>
+    </Compile>
+    <Compile Include="..\..\max44009.h">
+      <SubType>compile</SubType>
+      <Link>max44009.h</Link>
+    </Compile>
+    <Compile Include="..\..\max44009Types.h">
+      <SubType>compile</SubType>
+      <Link>max44009Types.h</Link>
+    </Compile>
     <Compile Include="atmel_start.c">
       <SubType>compile</SubType>
     </Compile>
