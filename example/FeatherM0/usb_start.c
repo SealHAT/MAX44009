@@ -15,14 +15,14 @@ static struct usbd_descriptors single_desc[] = { {single_desc_bytes, single_desc
 
 static uint8_t ctrl_buffer[64];					/* Ctrl endpoint buffer */
 static uint8_t tx_buff[USB_BUFFER_SIZE];		/* The TX buffer for sending bytes */
-volatile static uint8_t tx_idx = 0;				/* index to track the position in the TX queue*/
+static volatile uint8_t tx_idx = 0;				/* index to track the position in the TX queue*/
 static ring_buffer_t rx_buff;					/* Ring buffer queue */
 
-volatile static bool inComplete  = false;		/* flag to indicate an IN transfer has occurred */
-volatile static bool outComplete = false;		/* flag to indicate an OUT transfer has occurred */
-volatile static bool dtr_flag    = false;		/* Flag to indicate status of DTR - Data Terminal Ready */
-volatile static bool rts_flag    = false;		/* Flag to indicate status of RTS - Request to Send */
-
+static volatile bool inComplete  = false;		/* flag to indicate an IN transfer has occurred */
+static volatile bool outComplete = false;		/* flag to indicate an OUT transfer has occurred */
+static volatile bool dtr_flag    = false;		/* Flag to indicate status of DTR - Data Terminal Ready */
+static volatile bool rts_flag    = false;		/* Flag to indicate status of RTS - Request to Send */
+ 
 /**
  * \brief Callback for USB to simply set a flag that data has been received.
  */
