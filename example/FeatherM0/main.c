@@ -1,7 +1,7 @@
 #include <atmel_start.h>
 #include <stdio.h>
-#include "usb_start.h"
 #include "max44009.h"
+#include "SerialPrint.h"
 
 #define STRING_SIZE     (64)
 
@@ -14,7 +14,7 @@ int main(void)
     atmel_start_init();
     max44009_init(&wire, LIGHT_ADD_GND);
 
-    while (1) {
+    for(;;) {
         /* Turn on LED if the DTR signal is set (serial terminal open on host) */
         gpio_set_pin_level(LED_BUILTIN, usb_dtr());
 
@@ -22,14 +22,9 @@ int main(void)
         reading = max44009_read_uint16();
 
         /* Format as a string and output to USB Serial */
-        sprintf(output, "%04X (exp=%2d  mant=%3d) -> %ld lux\n", reading, (reading>>8), reading&0xFF, max44009_integer_lux(reading));
+        snprintf(output, STRING_SIZE, "%04X,%d,%d,%ld\n", reading, (reading>>8), reading&0xFF, max44009_integer_lux(reading));
         if(usb_dtr()) {
-            char* c = output;
-            while(*c != '\0') {
-                usb_put(*c);
-                c++;
-            }
-            usb_flush();
+            usb_write(output, strlen(output));
         }
         delay_ms(1000);
     }
