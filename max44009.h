@@ -14,9 +14,9 @@
  *
  * @param WIRE_I2C device data structure to use for talking to the sensor
  * @param ADDR Address of the sensor (see MAX44009_ADDR_t enum)
- * @return True if successful, false if not. Any error is likely due to I2C
+ * @return Return ERR_NONE if successful, or a system error
  */
-bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR);
+int32_t max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR);
 
 /** @brief Configures the max44009 light sensor
  *
@@ -25,9 +25,9 @@ bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR);
  * configurations enumerations.
  *
  * @param configuration bitwise OR of the configuration settings
- * @return True if successful, false if not. Any error is likely due to I2C
+ * @return Return ERR_NONE if successful, or a system error
  */
-bool max44009_configure(const uint8_t configuration);
+int32_t max44009_configure(const uint8_t configuration);
 
 /** @brief Enables the interrupt output of the sensor
  *
@@ -36,9 +36,9 @@ bool max44009_configure(const uint8_t configuration);
  * Use enumeration values in LIGHT_ISR_ENABLED_t to set value.
  *
  * @param enable enable or disable ISR with enum or literal 0x00 and 0x01
- * @return True if successful, false if not. Any error is likely due to I2C
+ * @return Return ERR_NONE if successful, or a system error
  */
-bool max44009_isr(const uint8_t enable);
+int32_t max44009_isr(const uint8_t enable);
 
 /** @brief Gets the most recent reading from the sensor without decoding
  *
@@ -48,9 +48,10 @@ bool max44009_isr(const uint8_t enable);
  * 16 bit integer to reduce computational time. bits 0-7 are the mantissa and bits 8-11 are the
  * exponent. The high 4 bits will be set to 0.
  *
- * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
+ * @param reading [OUT] the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
+ * @return ERR_NONE if successful, system error value if failure.
  */
-uint16_t max44009_read_uint16();
+int32_t max44009_read(uint16_t* luxVal);
 
 /** @brief Gets the most recent reading from the sensor without decoding
  *
@@ -59,30 +60,18 @@ uint16_t max44009_read_uint16();
  *
  * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
  */
-uint32_t max44009_integer_lux(const uint16_t reading);
-
-/** @brief Gets the most recent reading from the sensor without decoding
- *
- * The sensor works by continuously sampling and storing the latest sample
- * into a register that can be read at any time. This function retrieves the
- * latest sample from that register. This function returns the lux value as an
- * unsigned integer, discarding the decimal portion of the value. Lux can range
- * from 0 to 188,006.
- *
- * @return the light value from the sensor with the LSB as the mantissa and the MSB as the exponent
- */
-inline uint32_t max44009_read_integer_lux() { return max44009_integer_lux(max44009_read_uint16()); }
+uint32_t max44009_lux_integer(const uint16_t reading);
 
 /** @brief Gets the most recent reading from the sensor
  *
- * The sensor works by continuously sampling and storing the latest sample
- * into a register that can be read at any time. This function retrieves the
- * latest sample from that register. This function does not work righ now
- * on the SAMD21G chip due to float issues.
+ * This function returns the Lux value as an floating point value,
+ * discarding the decimal portion of the value.
+ * Lux can range from 0 to 188,006.
  *
+ * @param reading [IN] a raw reading from the sensor
  * @return the light value from the sensor as a float value in lux
  */
-float max44009_read_float();
+float max44009_lux_float(const uint16_t reading);
 
 /** @brief Sets up the interrupt detection window
  *

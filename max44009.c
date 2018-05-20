@@ -7,50 +7,58 @@
 static struct i2c_m_sync_desc max44009_sync;
 
 /* read a single register */
-static uint8_t readReg(const uint8_t REG)
+static inline int32_t readReg(const uint8_t REG, uint8_t* data)
 {
-    uint8_t retval;
-    i2c_m_sync_cmd_read(&max44009_sync, REG, &retval, 1);
-    return retval;
+    return i2c_m_sync_cmd_read(&max44009_sync, REG, data, 1);
 }
 
 /* write a single register */
-static void writeReg(const uint8_t REG, uint8_t val)
+static inline int32_t writeReg(const uint8_t REG, uint8_t val)
 {
-    i2c_m_sync_cmd_write(&max44009_sync, REG, &val, 1);
+    return i2c_m_sync_cmd_write(&max44009_sync, REG, &val, 1);
 }
 
-bool max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR)
+int32_t max44009_init(struct i2c_m_sync_desc* const WIRE_I2C, const uint8_t ADDR)
 {
-    max44009_sync =  *WIRE_I2C;
-    i2c_m_sync_enable(&max44009_sync);
-    i2c_m_sync_set_slaveaddr(&max44009_sync, ADDR, I2C_M_SEVEN);
-    return true;
+    int32_t err;    // return value
+
+    max44009_sync = *WIRE_I2C;
+
+    err = i2c_m_sync_enable(&max44009_sync);
+    if(!err) {
+        err = i2c_m_sync_set_slaveaddr(&max44009_sync, ADDR, I2C_M_SEVEN);
+    }
+
+    return err;
 }
 
-bool max44009_configure(const uint8_t configuration)
+int32_t max44009_configure(const uint8_t configuration)
 {
-    writeReg(LIGHT_ISR_CONFIG, configuration);
-    return true;
+    return writeReg(LIGHT_ISR_CONFIG, configuration);
 }
 
-bool max44009_isr(const uint8_t enable)
+int32_t max44009_isr(const uint8_t enable)
 {
-    writeReg(LIGHT_ISR_ENABLE, enable);
-    return true;
+    return writeReg(LIGHT_ISR_ENABLE, enable);
 }
 
-uint16_t max44009_read_uint16()
+int32_t max44009_read(uint16_t* luxVal)
 {
-    uint16_t luxVal = 0x0000;
+    int32_t err;          // err value catcher
+    uint8_t data = 0x00;  // temporary read data
 
-    luxVal |= readReg(LIGHT_LUX_MSB) << 4;
-    luxVal |= (readReg(LIGHT_LUX_LSB) & 0x0F);
+    err = readReg(LIGHT_LUX_MSB, &data);
+    *luxVal |= (data << 4);
 
-    return luxVal;
+    if(!err) {
+        err = readReg(LIGHT_LUX_LSB, &data);
+        *luxVal |= (data & 0x0F);
+    }
+
+    return err;
 }
 
-uint32_t max44009_integer_lux(const uint16_t reading)
+uint32_t max44009_lux_integer(const uint16_t reading)
 {
 	uint8_t exponent;
 	uint8_t mantissa;
@@ -61,14 +69,13 @@ uint32_t max44009_integer_lux(const uint16_t reading)
 	return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
 }
 
-float max44009_read_float()
+float max44009_lux_float(const uint16_t reading)
 {
-    uint16_t value = max44009_read_uint16();
     uint8_t exponent;
     uint8_t mantissa;
 
-    exponent = value >> 8;
-    mantissa = value & 0xFF;
+    exponent = reading >> 8;
+    mantissa = reading & 0xFF;
 
     return pow(2, exponent) * (float)mantissa * FULL_ACCURACY_CONSTANT;
 }

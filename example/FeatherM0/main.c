@@ -8,6 +8,7 @@
 int main(void)
 {
     char  output[STRING_SIZE];
+    int32_t err;
     uint16_t reading;
 
     /* Initializes MCU, drivers and middleware */
@@ -19,10 +20,10 @@ int main(void)
         gpio_set_pin_level(LED_BUILTIN, usb_dtr());
 
         /* Read the light sensor as both a exponent/mantissa and as an integer LUX value */
-        reading = max44009_read_uint16();
+        err = max44009_read(&reading);
 
         /* Format as a string and output to USB Serial */
-        snprintf(output, STRING_SIZE, "%04X,%d,%d,%ld\n", reading, (reading>>8), reading&0xFF, max44009_integer_lux(reading));
+        snprintf(output, STRING_SIZE, "%04X,%d,%d,%ld\n", reading, (reading>>8), reading&0xFF, max44009_lux_integer(reading));
         if(usb_dtr()) {
             usb_write(output, strlen(output));
         }
