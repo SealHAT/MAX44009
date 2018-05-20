@@ -1,5 +1,4 @@
 #include "max44009.h"
-#include "math.h"
 
 #define FULL_ACCURACY_CONSTANT      (0.045)
 #define LOW_ACCURACY_CONSTANT       (0.720)
@@ -66,7 +65,7 @@ uint32_t max44009_lux_integer(const uint16_t reading)
 	exponent = reading >> 8;
 	mantissa = reading & 0xFF;
 
-	return pow(2, exponent) * mantissa * FULL_ACCURACY_CONSTANT;
+	return (1<<exponent) * mantissa * FULL_ACCURACY_CONSTANT;
 }
 
 float max44009_lux_float(const uint16_t reading)
@@ -77,7 +76,7 @@ float max44009_lux_float(const uint16_t reading)
     exponent = reading >> 8;
     mantissa = reading & 0xFF;
 
-    return pow(2, exponent) * (float)mantissa * FULL_ACCURACY_CONSTANT;
+    return (1<<exponent) * (float)mantissa * FULL_ACCURACY_CONSTANT;
 }
 
 bool max44009_set_window(const uint8_t upper, const uint8_t lower, const uint8_t timer)
