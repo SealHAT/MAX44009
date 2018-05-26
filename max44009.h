@@ -1,9 +1,8 @@
 #ifndef __MAX44009_H__
 #define __MAX44009_H__
 
-#include <atmel_start.h>    /* where the IO functions live */
+#include "hal_i2c_m_sync.h" // device specific IO functions
 #include <stdint.h>
-#include <stdbool.h>
 #include "max44009Types.h"
 
 /** @brief initializes the data structures and hardware interfaces
