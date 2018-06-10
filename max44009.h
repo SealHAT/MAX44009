@@ -3,7 +3,15 @@
 
 #include "hal_i2c_m_sync.h" // device specific IO functions
 #include <stdint.h>
-#include "max44009Types.h"
+
+/**
+ * 7-bit I2C slave address depends on the state of pin A0 (GND or VCC)
+ * R/W bit is the LSB of the address, with these addresses shifted left one bit.
+ */
+typedef enum {
+    LIGHT_ADD_GND            = 0x4A,
+    LIGHT_ADD_VCC            = 0x4B,
+} MAX44009_ADDR_t;
 
 /** @brief initializes the data structures and hardware interfaces
  *

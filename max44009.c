@@ -1,4 +1,5 @@
 #include "max44009.h"
+#include "max44009_private.h"
 
 #define FULL_ACCURACY_CONSTANT      (0.045)
 #define LOW_ACCURACY_CONSTANT       (0.720)

@@ -1,15 +1,6 @@
 // Data types used by the 44009 light sensor
-#ifndef __MAX44009_TYPES_H__
-#define __MAX44009_TYPES_H__
-
-/**
- * 7-bit I2C slave address depends on the state of pin A0 (GND or VCC)
- * R/W bit is the LSB of the address, with these addresses shifted left one bit.
- */
-typedef enum {
-    LIGHT_ADD_GND            = 0x4A,
-    LIGHT_ADD_VCC            = 0x4B,
-} MAX44009_ADDR_t;
+#ifndef __MAX44009_PRIVATE_H__
+#define __MAX44009_PRIVATE_H__
 
 /**
  * Register addresses for the MAX44009 light sensor
