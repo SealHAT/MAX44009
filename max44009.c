@@ -47,6 +47,9 @@ int32_t max44009_read(uint16_t* luxVal)
     int32_t err;          // err value catcher
     uint8_t data = 0x00;  // temporary read data
 
+    // reset the return value
+    *luxVal = 0x0000;
+
     err = readReg(LIGHT_LUX_MSB, &data);
     *luxVal |= (data << 4);
 
